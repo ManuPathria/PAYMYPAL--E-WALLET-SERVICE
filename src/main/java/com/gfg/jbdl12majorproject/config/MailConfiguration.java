@@ -16,8 +16,8 @@ public class MailConfiguration {
         JavaMailSenderImpl javaMailSender=new JavaMailSenderImpl();
         javaMailSender.setHost("smtp.gmail.com");
         javaMailSender.setPort(587);//port we r going to use is there in google 587
-        javaMailSender.setUsername("<yourMailId>");
-        javaMailSender.setPassword("<yourMailPassword>");
+        javaMailSender.setUsername("");
+        javaMailSender.setPassword("");
         Properties properties=new Properties();
         properties.put("mail.smtp.starttls.enable","true");
         properties.put("mail.debug","true");

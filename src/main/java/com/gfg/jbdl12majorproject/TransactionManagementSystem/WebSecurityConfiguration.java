@@ -5,6 +5,7 @@ import com.gfg.jbdl12majorproject.TransactionManagementSystem.manager.UserDetail
 import com.gfg.jbdl12majorproject.oauth.CustumOAuth2User;
 import com.gfg.jbdl12majorproject.oauth.CustumOAuth2UserService;
 import com.gfg.jbdl12majorproject.userservice.entities.AuthenticationProvider;
+import com.gfg.jbdl12majorproject.userservice.entities.PaymentUser;
 import com.gfg.jbdl12majorproject.userservice.manager.UserManager;
 import com.gfg.jbdl12majorproject.userservice.model.SignUpRequest;
 import com.gfg.jbdl12majorproject.userservice.repository.UserRepository;
@@ -17,6 +18,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -85,17 +87,21 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                                         Authentication authentication) throws IOException, ServletException {
                         System.out.println(authentication.getPrincipal().toString());
-
                         CustumOAuth2User oauthUser=new CustumOAuth2User((OAuth2User) authentication.getPrincipal());
-                        SignUpRequest signUpRequest=SignUpRequest.builder()
-                                .username(oauthUser.getName())
-                                .email(oauthUser.getEmail())
-                                .authenticationProvider(AuthenticationProvider.GOOGLE)
-                                .password("")
-                                .build();
-                        usrManager.create(signUpRequest);
-                        //to send notification that ur user has been created
-                        response.sendRedirect("/login_success");
+                        try {
+                            getUser(oauthUser.getName());
+                            response.sendRedirect("/login_again");
+                        }catch (UsernameNotFoundException exception){//if username not present then we make a new paymentUser
+                            SignUpRequest signUpRequest=SignUpRequest.builder()
+                                    .username(oauthUser.getName())
+                                    .email(oauthUser.getEmail())
+                                    .authenticationProvider(AuthenticationProvider.GOOGLE)
+                                    .password("")
+                                    .build();
+                            usrManager.create(signUpRequest);
+                            //to send notification that ur user has been created
+                            response.sendRedirect("/login_success");
+                        }
                     }
                 })
                 .and()
@@ -105,5 +111,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .disable();
     }
 
+    public PaymentUser getUser(String id) {
+        return userRepository.findByUsername(id).orElseThrow(()->new UsernameNotFoundException("username is not found for : "+id));
+    }
 
 }

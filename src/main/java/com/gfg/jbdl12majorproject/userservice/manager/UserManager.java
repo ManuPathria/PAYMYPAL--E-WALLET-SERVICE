@@ -24,9 +24,10 @@ public class UserManager {
     private KafkaTemplate<String,String> kafkaTemplate;
     ObjectMapper objectMapper = new ObjectMapper();
 
-    public void create(SignUpRequest signUpRequest) throws JsonProcessingException {
+    public String create(SignUpRequest signUpRequest) throws JsonProcessingException {
         try {
             getUser(signUpRequest.getUsername());
+            return "signup_form_again";
         }catch (UsernameNotFoundException exception){//if username not present then we make a new paymentUser
             PaymentUser user = PaymentUser.builder()
                     .username(signUpRequest.getUsername())
@@ -46,7 +47,7 @@ public class UserManager {
                     .type(NotificationType.USER_CREATED)
                     .message("Welcome ".concat(user.getUsername())).build();
             kafkaTemplate.send("notification",objectMapper.writeValueAsString(notificationRequest));
-
+            return  "register_success_local";
         }
     }
 

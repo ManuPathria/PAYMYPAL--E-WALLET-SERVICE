@@ -32,12 +32,17 @@ public class ViewController {
                 .authenticationProvider(AuthenticationProvider.LOCAL)
                 .password(password)
                 .build();
-        userManager.create(signUpRequest);
-        return "register_success";
+        String url=userManager.create(signUpRequest);
+        return url;
     }
 
     @GetMapping("/login_success")
     public String getSuccessPage(){
-        return "register_success";
+        return "register_success_google";
     }
+    @GetMapping("/login_again")
+    public String showSignUpAgain(){
+        return "signup_form_again";
+    }
+
 }

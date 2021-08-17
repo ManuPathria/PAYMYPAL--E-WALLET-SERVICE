@@ -89,7 +89,6 @@ public class WalletManagerImpl implements WalletManager{
     @Override
     public void addAmount(String userID,Double amount, UsernamePasswordAuthenticationToken loggedInUser) throws ForbiddenException, JsonProcessingException {
 
-
         if(loggedInUser.getName().equals(userID)){
             Wallet wallet=walletRepository.findByUserId(userID)
                     .orElseThrow(() -> new ForbiddenException("wallet is not found for user"));

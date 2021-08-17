@@ -1,6 +1,5 @@
 package com.gfg.jbdl12majorproject.wallet.model;
 
-import com.gfg.jbdl12majorproject.TransactionManagementSystem.model.TransactionType;
 import lombok.*;
 
 @AllArgsConstructor

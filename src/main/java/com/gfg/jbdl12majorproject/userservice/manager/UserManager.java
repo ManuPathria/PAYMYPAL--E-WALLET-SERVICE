@@ -2,8 +2,6 @@ package com.gfg.jbdl12majorproject.userservice.manager;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.gfg.jbdl12majorproject.notfication.NotificationRequest;
-//import com.gfg.jbdl12majorproject.notfication.NotificationType;
 import com.gfg.jbdl12majorproject.notification.NotificationRequest;
 import com.gfg.jbdl12majorproject.notification.NotificationType;
 import com.gfg.jbdl12majorproject.userservice.entities.PaymentUser;
@@ -35,11 +33,11 @@ public class UserManager {
                     .password(bCryptPasswordEncoder.encode(signUpRequest.getPassword()))
                     .email(signUpRequest.getEmail())
                     .authority("user")
+                    .authenticationProvider(signUpRequest.getAuthenticationProvider())
                     .build();
             userRepository.save(user);
             kafkaTemplate.send("createWallet",user.getUsername());//whenever we create a user we are also creating a wallet//we are saying create a wallet for this usernamw
                             //topic "createWallet" is in "WalletManagerImpl" class
-
 
             //to send notification that ur user has been created
             NotificationRequest notificationRequest = NotificationRequest

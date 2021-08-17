@@ -25,4 +25,8 @@ public class PaymentUser {//this is just user object and not part of authenticat
     @Column(unique = true)
     private String email;
     private String password;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(name = "auth_provider")
+    private AuthenticationProvider authenticationProvider;
 }

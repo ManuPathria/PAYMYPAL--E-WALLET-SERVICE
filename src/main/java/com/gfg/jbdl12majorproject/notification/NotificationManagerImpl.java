@@ -29,12 +29,12 @@ public class NotificationManagerImpl implements NotificationManager{
         NotificationRequest notificationRequest=objectMapper.readValue(message,NotificationRequest.class);
         RestTemplate restTemplate=new RestTemplate();
         PaymentUser paymentUser = restTemplate.getForEntity("http://localhost:8080/user/".concat(notificationRequest.getUser()), PaymentUser.class).getBody();
-
+        System.out.println("CURRENT USER: "+paymentUser.getEmail());
         simpleMailMessage.setSubject(notificationRequest.getType().name());
         simpleMailMessage.setText(notificationRequest.getMessage());
         InternetAddress internetAddress=new InternetAddress(paymentUser.getEmail(),"","UTF-8");
         simpleMailMessage.setTo(internetAddress.getAddress());
-        simpleMailMessage.setFrom("ritikamadaan15@gmail.com");
+        simpleMailMessage.setFrom("manupathria@gmail.com");
 
         javaMailSender.send(simpleMailMessage);
     }

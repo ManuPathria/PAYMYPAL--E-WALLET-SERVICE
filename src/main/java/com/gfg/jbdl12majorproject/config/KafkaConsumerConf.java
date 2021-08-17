@@ -29,14 +29,11 @@ public class KafkaConsumerConf {
                 = new ConcurrentKafkaListenerContainerFactory<>();
         concurrentKafkaListenerContainerFactory.setConsumerFactory(consumerFactory());
         return concurrentKafkaListenerContainerFactory;
-
     }
 
     @Bean
     ConsumerFactory<String, String> consumerFactory(){
         return new DefaultKafkaConsumerFactory<>(consumerProperties());
     }
-
-
 
 }

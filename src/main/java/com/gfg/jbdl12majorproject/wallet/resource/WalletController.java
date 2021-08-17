@@ -31,9 +31,8 @@ public class WalletController {
             walletManager.addAmount(userId,amount,usernamePasswordAuthenticationToken);
             return ResponseEntity.ok().build();
         }catch(ForbiddenException ex){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
-
         catch (Exception exception) {
             log.error(exception.getMessage());
             return ResponseEntity.badRequest().build();

@@ -1,7 +1,6 @@
 package com.gfg.jbdl12majorproject.notification;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-
 import java.io.UnsupportedEncodingException;
 
 public interface NotificationManager {

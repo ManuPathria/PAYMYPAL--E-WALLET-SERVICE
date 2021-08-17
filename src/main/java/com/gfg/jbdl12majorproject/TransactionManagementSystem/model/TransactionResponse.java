@@ -10,7 +10,6 @@ import lombok.*;
 @Setter
 @Builder
 public class TransactionResponse {
-
     private String transactionId;
     private String transactionStatus;
 }

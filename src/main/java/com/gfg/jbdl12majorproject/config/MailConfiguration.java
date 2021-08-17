@@ -13,12 +13,11 @@ public class MailConfiguration {
     @Bean
     JavaMailSender javaMailSender(){//JavaMailSender->a client which is requesting google server to send emails(similar to kafkaTemplate or redisTemplate)
         //actually ur mail sender is google.so here u have to provide server details of google(smtp server)
-
         JavaMailSenderImpl javaMailSender=new JavaMailSenderImpl();
         javaMailSender.setHost("smtp.gmail.com");
         javaMailSender.setPort(587);//port we r going to use is there in google 587
-        javaMailSender.setUsername("ritikamadaan15@gmail.com");
-        javaMailSender.setPassword("dron2003");
+        javaMailSender.setUsername("testapis911@gmail.com");
+        javaMailSender.setPassword("test911#");
         Properties properties=new Properties();
         properties.put("mail.smtp.starttls.enable","true");
         properties.put("mail.debug","true");

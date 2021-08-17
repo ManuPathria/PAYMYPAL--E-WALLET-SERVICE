@@ -6,7 +6,8 @@ import com.gfg.jbdl12majorproject.ForbiddenException;
 import com.gfg.jbdl12majorproject.TransactionManagementSystem.model.TransactionStatus;
 import com.gfg.jbdl12majorproject.TransactionManagementSystem.model.TransactionType;
 import com.gfg.jbdl12majorproject.TransactionManagementSystem.model.TransactionUpdate;
-import com.gfg.jbdl12majorproject.userservice.entities.PaymentUser;
+import com.gfg.jbdl12majorproject.notification.NotificationRequest;
+import com.gfg.jbdl12majorproject.notification.NotificationType;
 import com.gfg.jbdl12majorproject.wallet.entity.Wallet;
 import com.gfg.jbdl12majorproject.wallet.model.UpdateWalletRequest;
 import com.gfg.jbdl12majorproject.wallet.repository.WalletRepository;
@@ -14,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -87,7 +87,7 @@ public class WalletManagerImpl implements WalletManager{
     }
 
     @Override
-    public void addAmount(String userID,Double amount, UsernamePasswordAuthenticationToken loggedInUser) throws ForbiddenException {
+    public void addAmount(String userID,Double amount, UsernamePasswordAuthenticationToken loggedInUser) throws ForbiddenException, JsonProcessingException {
 
 
         if(loggedInUser.getName().equals(userID)){
@@ -96,6 +96,14 @@ public class WalletManagerImpl implements WalletManager{
             wallet.setBalance(wallet.getBalance() +amount);
             walletRepository.save(wallet);
 
+            NotificationRequest notificationRequest= NotificationRequest.builder()
+                    .user(userID)
+                    .type(NotificationType.AMOUNT_ADDED)
+                    .message("AMOUNT:".concat(amount.toString()).concat(" got added to your wallet"))
+                    .build();
+            kafkaTemplate.send("notification",objectMapper.writeValueAsString(notificationRequest));
+        }else{
+            throw new ForbiddenException("Incorrect credentials provided...");
         }
     }
 }

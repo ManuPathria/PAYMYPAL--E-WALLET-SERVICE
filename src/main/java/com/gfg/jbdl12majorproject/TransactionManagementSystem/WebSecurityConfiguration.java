@@ -42,12 +42,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userManager)
-                .passwordEncoder(bCryptPasswordEncoder())
-                .and()
-                .inMemoryAuthentication()
-                .withUser("admin")
-                .password(bCryptPasswordEncoder().encode("password"))
-                .authorities("admin");
+                .passwordEncoder(bCryptPasswordEncoder());
+//                .and()
+//                .inMemoryAuthentication()
+//                .withUser("admin")
+//                .password(bCryptPasswordEncoder().encode("password"))
+//                .authorities("admin");
     }
     @Autowired
     private CustumOAuth2UserService oAuthUserService;

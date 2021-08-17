@@ -120,15 +120,16 @@ public class TransactionManagerImpl implements TransactionManager {
                                     .concat(transaction.getTransactionStatus()) + "\n" + "INR ".concat(String.valueOf(transaction.getAmount()))
                                     .concat(" transferred from your Wallet to ").concat(transaction.getToUserId()))
                             .build();
-                } else if (transaction.getTransactionType().equals("DEBIT")) {
-                    notificationRequest = NotificationRequest.builder()
-                            .user(transaction.getFromUserId())
-                            .type(NotificationType.TRANSACTION_UPDATED)
-                            .message("Trasaction with id ".concat(transaction.getTransactionId()).concat(" ")
-                                    .concat(transaction.getTransactionStatus()) + "\n" + "INR ".concat(String.valueOf(transaction.getAmount()))
-                                    .concat(" transferred to your Wallet from ").concat(transaction.getToUserId()))
-                            .build();
                 }
+//                else if (transaction.getTransactionType().equals("DEBIT")) {
+//                    notificationRequest = NotificationRequest.builder()
+//                            .user(transaction.getFromUserId())
+//                            .type(NotificationType.TRANSACTION_UPDATED)
+//                            .message("Trasaction with id ".concat(transaction.getTransactionId()).concat(" ")
+//                                    .concat(transaction.getTransactionStatus()) + "\n" + "INR ".concat(String.valueOf(transaction.getAmount()))
+//                                    .concat(" transferred to your Wallet from ").concat(transaction.getToUserId()))
+//                            .build();
+//                }
                 kafkaTemplate.send("notification", objectMapper.writeValueAsString(notificationRequest));
             } else if (transaction.getTransactionStatus().equals("REJECTED")) {
                 notificationRequest = NotificationRequest.builder()
